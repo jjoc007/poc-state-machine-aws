@@ -1,0 +1,10 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "client ws",
+  "main": "main.js",
+  "author": "JJOC007",
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
+}

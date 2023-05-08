@@ -1,0 +1,11 @@
+{
+  "name": "on-connect",
+  "version": "1.0.0",
+  "description": "onConnect example for WebSockets on API Gateway",
+  "main": "main.js",
+  "author": "JJOC007",
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.1045.0"
+  }
+}
