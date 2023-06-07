@@ -9,9 +9,9 @@ export class ProcessData implements IProcessData {
         this.camaraClient = camaraClient;
     }
 
-    processData(step: string, data: string): void {
+    processData(step: string, data: string): string {
         console.log(`Step: ${step} Data: ${data} from service`)
         const {identification_type, identification_number} = JSON.parse(data);
-        this.camaraClient.getData(identification_type, identification_number);
+        return this.camaraClient.getData(identification_type, identification_number);
     }
 }

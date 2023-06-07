@@ -1,5 +1,5 @@
 resource "aws_iam_role" "example_lambda_role" {
-  name               = "example_lambda_role"
+  name               = "example_lambda_role_poc_sf"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_role" "step_functions_role" {
-  name = "step-functions-role"
+  name = "step_functions_role_poc_sf"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -35,7 +35,7 @@ resource "aws_iam_role" "step_functions_role" {
 }
 
 resource "aws_iam_policy" "step_functions_policy_lambda" {
-  name   = "step_functions_policy_lambda_policy_all"
+  name   = "step_functions_policy_lambda_policy_all_poc_sf"
   policy = data.aws_iam_policy_document.lambda_access_policy.json
 }
 
@@ -59,7 +59,7 @@ resource "aws_iam_role_policy_attachment" "lambda_to_default" {
 }
 
 resource "aws_iam_policy" "default_policy_web_step" {
-  name   = "step_default_policy_all"
+  name   = "step_default_policy_all_poc_sf"
   policy = data.aws_iam_policy_document.default_lambda_policy.json
 }
 
@@ -81,4 +81,44 @@ data "aws_iam_policy_document" "default_lambda_policy" {
     ]
     resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*:*"]
   }
+}
+
+resource "aws_iam_role" "apigateway_stepfunctions_execution_role" {
+  name = "apigateway_stepfunctions_execution_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "apigateway_stepfunctions_execution_policy" {
+  name = "apigateway_stepfunctions_execution_policy"
+  role = aws_iam_role.apigateway_stepfunctions_execution_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "states:*"
+      ],
+      "Resource": "${aws_sfn_state_machine.example_step_function.arn}"
+    }
+  ]
+}
+EOF
 }

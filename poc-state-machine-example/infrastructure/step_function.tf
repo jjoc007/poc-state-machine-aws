@@ -24,4 +24,6 @@ resource "aws_sfn_state_machine" "example_step_function" {
       }
     }
   })
+
+  type = "EXPRESS"
 }
